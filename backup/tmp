@@ -1,0 +1,22 @@
+# 0.安装qingcloud agent
+下载青云提供的 app agent Linux 版本, Windows 版本，解压后运行 ./install.sh (Windows 下双击 install.bat)
+ref：https://pek3a.qingstor.com/appcenter/developer/packages/app-agent-linux-amd64.tar.gz
+
+```sh
+wget http://appcenter-docs.qingcloud.com/developer-guide/scripts/app-agent-linux-amd64.tar.gz
+tar -xvf app-agent-linux-amd64.tar.gz
+cd app-agent-linux-amd64/
+./install.sh
+```
+
+
+# 1.curl http://metadata/self
+
+
+{{if exists "/links/postgresql_service/cluster/app_id"}}
+{{$pg_ip :=getv "/links/postgresql_service/cluster/endpoints/reserved_ips/vip/value"}} 
+{{$pg_db :=getv "/links/postgresql_service/env/pg/DBname"}}
+{{$pg_user :=getv "/links/postgresql_service/env/pg/DBusername"}}
+{{$pg_pwd :=getv "/links/postgresql_service/env/pg/DBpassword"}} 
+sql_alchemy_conn = postgresql+psycopg2://root:{{$pg_pwd}}@{{$pg_ip}}/{{$pg_db}} 
+{{end}}

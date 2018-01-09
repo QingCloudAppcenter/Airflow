@@ -1,0 +1,5 @@
+[template]
+src = "airflow.cfg.tmpl"
+dest = "/root/airflow/airflow.cfg"
+keys = ["/",] 
+reload_cmd = "python /root/airflow/airflowscripts/airflowapp.py restart"

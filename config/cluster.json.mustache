@@ -1,0 +1,87 @@
+{
+    "name": {{cluster.name}},
+    "description": {{cluster.description}},
+    "vxnet": {{cluster.vxnet}},
+    "links": { 
+         "postgresql_service": {{cluster.postgresql_service}}
+     },
+	"backup_policy": "device",	 
+    "nodes": [{
+		"role": "airflow_standalone",
+        "container": {
+            "type": "lxc",
+            "image": "img-jv9xs0se",
+            "zone": "sh1a"
+        },
+        "cpu": {{cluster.airflow_standalone.cpu}},
+        "memory": {{cluster.airflow_standalone.memory}},
+        "instance_class": {{cluster.airflow_standalone.instance_class}},
+		"count":1,
+		"volume": {
+            "size": {{cluster.airflow_standalone.volume_size}},
+            "mount_point": "/data",
+            "mount_options": "defaults,noatime",
+            "filesystem": "ext4" 
+        },
+        "services": {
+			"init": { 
+                "cmd": "/root/airflow/airflowscripts/initdatapath.sh;python /root/airflow/airflowscripts/airflowapp.py init;"
+            },
+			"start": { 
+                "cmd": "python /root/airflow/airflowscripts/airflowapp.py start"
+            },
+			"restart": {
+                "cmd": "python /root/airflow/airflowscripts/airflowapp.py restart"
+            },
+            "stop": {
+                 "cmd": "python /root/airflow/airflowscripts/airflowapp.py stop"
+            }, 
+            "init-airflow": {
+                "type": "custom",
+                "cmd": "python /root/airflow/airflowscripts/airflowapp.py initairflow",
+                "timeout": 86400 
+			},
+			"backup": {
+                "cmd": "echo `date '+%Y-%m-%d %H:%M:%S'`:backup!>>/data/airflow/logs/airflowapp.log", 
+                "timeout": 86400
+            }
+        },
+		"env": {
+		  "executor": {{env.executor}}, 
+		  "load_examples": {{env.load_examples}}, 
+		  "sql_alchemy_pool_size": {{env.sql_alchemy_pool_size}}, 
+		  "sql_alchemy_pool_recycle": {{env.sql_alchemy_pool_recycle}},
+		  "parallelism": {{env.parallelism}}, 
+		  "dag_concurrency": {{env.dag_concurrency}}, 
+		  "max_active_runs_per_dag": {{env.max_active_runs_per_dag}}, 
+		  "default_owner": {{env.default_owner}},
+		  "default_cpus": {{env.default_cpus}},
+		  "default_ram": {{env.default_ram}},
+		  "default_disk": {{env.default_disk}},
+		  "web_server_port": {{env.web_server_port}}, 
+		  "web_server_worker_timeout": {{env.web_server_worker_timeout}}, 
+		  "worker_refresh_batch_size": {{env.worker_refresh_batch_size}},
+		  "workers": {{env.workers}}, 
+		  "smtp_host": {{env.smtp_host}},
+		  "smtp_starttls": {{env.smtp_starttls}},
+		  "smtp_ssl": {{env.smtp_ssl}},
+		  "smtp_user": {{env.smtp_user}},
+		  "smtp_password": {{env.smtp_password}},
+		  "smtp_mail_from": {{env.smtp_mail_from}},
+		  "job_heartbeat_sec": {{env.job_heartbeat_sec}},
+		  "scheduler_heartbeat_sec": {{env.scheduler_heartbeat_sec}},
+		  "scheduler_zombie_task_threshold": {{env.scheduler_zombie_task_threshold}}    
+		},
+		"health_check" : {
+        "enable": true,
+        "interval_sec": 60,
+        "timeout_sec": 10,
+        "action_timeout_sec": 30,
+        "healthy_threshold": 2,
+        "unhealthy_threshold": 2,
+        "check_cmd": "python /root/airflow/airflowscripts/airflowapp.py check",
+        "action_cmd": "python /root/airflow/airflowscripts/airflowapp.py action"
+      }  
+    }
+	]
+}

@@ -1,0 +1,15 @@
+PATH=${PATH}:/usr/local/bin/:/bin
+#PATH=/bin:${PATH}
+export PATH 
+
+export AIR=/root/airflow
+export AIRFLOW_HOME=/root/airflow
+
+LOGS=/data/airflow/logs/
+export LOGS
+
+DAGS=/data/airflow/dags/
+export DAGS
+
+APPCMD=/root/airflow/airflowscripts
+export APPCMD

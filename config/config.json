@@ -1,0 +1,347 @@
+{
+	"type": "array",
+	"properties": [
+		{
+			"key": "cluster",
+			"description": "cluster properties",
+			"type": "array",
+			"properties": [
+				{
+					"key": "name",
+					"type": "string",
+					"label": "App Name",
+					"description": "The name of the application",
+					"default": "Airflow Standalone",
+					"required": "no"
+				},
+				{
+					"key": "description",
+					"type": "string",
+					"label": "Description",
+					"description": "The description of the application",
+					"default": "",
+					"required": "no"
+				},
+				{
+					"key": "vxnet",
+					"label": "VxNet",
+					"description": "The vxnet that the application will join",
+					"type": "string",
+					"default": "",
+					"required": "yes"
+				},{
+					"key": "postgresql_service",
+					"label": "postgresql",
+					"description": "Choose a postgresql to use and related postgresql infomation in service properties section below, leave empty if you choose not to use it",
+					"type": "service",
+					"tag": ["Postgresql"],
+                    "limits": {
+                        "app-gtusp816": ["appv-7tb3ldwl"]
+                    },
+					"default": "",
+					"required": "yes"
+				},
+				{
+					"key": "airflow_standalone",
+					"description": "role-based node properties",
+					"label": "airflow Standalone",
+					"type": "array",
+					"properties": [
+						{
+							"key": "cpu",
+							"label": "CPU",
+							"description": "CPUs of each node",
+							"type": "integer",
+							"default": 1,
+							"range": [
+								1,
+								2,
+								4,
+								8,
+								16
+							],
+							"required": "yes"
+						},
+						{
+							"key": "memory",
+							"label": "Memory",
+							"description": "Memory of each node (in MiB)",
+							"type": "integer",
+							"default": 2048,
+							"range": [
+								2048,
+								4096,
+								8192,
+								16384,
+								32768,
+								49152
+							],
+							"required": "yes"
+						},
+						{
+							"key": "instance_class",
+							"label": "Instance Class",
+							"description": "The instance type for the cluster to run，such as high performance，high performance plus",
+							"type": "integer",
+							"default": 1,
+							"range": [
+								0,
+								1
+							],
+							"required": "yes"
+						}, 
+						{
+							"key": "volume_size",
+							"label": "Volume Size",
+							"description": "The volume size for each instance",
+							"type": "integer",
+							"default": 10,
+							"min": 10,
+							"max": 1000,
+							"step": 10,
+							"required": "yes"
+						}
+					]
+				}
+			]
+		},
+		{
+			"key": "env",
+			"description": "application configuration properties",
+			"type": "array",
+			"properties": [
+				{
+					"key": "executor",
+					"label": "executor",
+					"description": "The executor class that airflow should use.",
+					"type": "string",
+					"range": [
+						"SequentialExecutor",
+						"LocalExecutor"
+					],
+					"default": "LocalExecutor",
+					"required": "yes"
+				}, 
+				{
+					"key": "load_examples",
+					"label": "load_examples",
+					"description": "Whether to load the examples that ship with Airflow.",
+					"type": "string",
+					"range": [
+						"True",
+						"False"
+					],
+					"default": "True",
+					"required": "yes"
+				}, 
+				{
+					"key": "sql_alchemy_pool_size",
+					"label": "sql_alchemy_pool_size",
+					"description": "The SqlAlchemy pool size is the maximum number of database connections in the pool.",
+					"type": "integer",
+					"default": 5,
+					"min": 0,
+					"max": 500,
+					"required": "no"
+				},
+				{
+					"key": "sql_alchemy_pool_recycle",
+					"label": "sql_alchemy_pool_recycle",
+					"description": "The SqlAlchemy pool recycle is the number of seconds a connection can be idle in the pool before it is invalidated.",
+					"type": "integer",
+					"default": 3600,
+					"min": 0,
+					"max": 36000,
+					"required": "no"
+				},
+				{
+					"key": "parallelism",
+					"label": "parallelism",
+					"description": "The amount of parallelism as a setting to the executor.This defines the max number of task instances that should run simultaneously on this airflow installation.",
+					"type": "integer",
+					"default": 32,
+					"min": 0,
+					"max": 200,
+					"required": "no"
+				},
+				{
+					"key": "dag_concurrency",
+					"label": "dag_concurrency",
+					"description": "The number of task instances allowed to run concurrently by the scheduler.",
+					"type": "integer",
+					"default": 16,
+					"min": 0,
+					"max": 100,
+					"required": "no"
+				},
+				{
+					"key": "max_active_runs_per_dag",
+					"label": "max_active_runs_per_dag",
+					"description": "The maximum number of active DAG runs per DAG.",
+					"type": "integer",
+					"default": 16,
+					"min": 0,
+					"max": 100,
+					"required": "no"
+				},   
+				{
+					"key": "default_owner",
+					"label": "default_owner",
+					"description": "The default owner assigned to each new operator.",
+					"type": "string", 
+					"default": "airflow",
+					"required": "no"
+				}, 
+				{
+					"key": "default_cpus",
+					"label": "default_cpus",
+					"description": "The default CPU assigned to each new operator.",
+					"type": "integer",
+					"default": 1,
+					"min": 0,
+					"max": 64,
+					"required": "no"
+				},  
+				{
+					"key": "default_ram",
+					"label": "default_ram",
+					"description": "The default RAM assigned to each new operator.",
+					"type": "integer",
+					"default": 512,
+					"min": 0,
+					"max": 32768,
+					"required": "no"
+				},
+				{
+					"key": "default_disk",
+					"label": "default_disk",
+					"description": "The default disk assigned to each new operator.",
+					"type": "integer",
+					"default": 512,
+					"min": 0,
+					"max": 32768,
+					"required": "no"
+				},  
+				{
+					"key": "web_server_worker_timeout",
+					"label": "web_server_worker_timeout",
+					"description": "Number of seconds the gunicorn webserver waits before timing out on a worker.",
+					"type": "integer",
+					"default": 120,
+					"min": 0,
+					"max": 500,
+					"required": "no"
+				},  
+				{
+					"key": "worker_refresh_batch_size",
+					"label": "worker_refresh_batch_size",
+					"description": "Number of workers to refresh at a time.",
+					"type": "integer",
+					"default": 1,
+					"min": 0,
+					"max": 50,
+					"required": "no"
+				},  
+				{
+					"key": "web_server_port",
+					"label": "web_server_port",
+					"description": "The port on which to run the web server.",
+					"type": "integer",
+					"default": 8080,
+					"min": 1,
+					"max": 65535,
+					"required": "no"
+				},{
+					"key": "workers",
+					"label": "workers",
+					"description": "Number of workers to run the Gunicorn web server.",
+					"type": "integer",
+					"default": 4,
+					"min": 1,
+					"max": 100,
+					"required": "no"
+				},{
+					"key": "smtp_host",
+					"label": "smtp_host",
+					"description": "smtp host",
+					"type": "string", 
+					"default": "smtp.163.com",
+					"required": "no"
+				} ,
+				{
+					"key": "smtp_starttls",
+					"label": "smtp_starttls",
+					"description": "smtp starttls",
+					"type": "string",
+					"range": [
+						"True",
+						"False"
+					],
+					"default": "True",
+					"required": "no"
+				},
+				{
+					"key": "smtp_ssl",
+					"label": "smtp_ssl",
+					"description": "smtp ssl",
+					"type": "string",
+					"range": [
+						"True",
+						"False"
+					],
+					"default": "False",
+					"required": "no"
+				},{
+					"key": "smtp_user",
+					"label": "smtp_user",
+					"description": "smtp user",
+					"type": "string", 
+					"default": "",
+					"required": "no"
+				},{
+					"key": "smtp_password",
+					"label": "smtp_password",
+					"description": "smtp password", 
+					"default": "",
+					"type": "password",
+					"required": "no"
+				},{
+					"key": "smtp_mail_from",
+					"label": "smtp_mail_from",
+					"description": "smtp mail from",
+					"type": "string", 
+					"default": "airflowonqingcloud@163.com",
+					"required": "no"
+				},{
+					"key": "job_heartbeat_sec",
+					"label": "job_heartbeat_sec",
+					"description": "Task instances listen for external kill signal, this defines the frequency at which they should listen (in seconds)",
+					"type": "integer",
+					"default": 5,
+					"min": 1,
+					"max": 100,
+					"required": "no"
+				},{
+					"key": "scheduler_heartbeat_sec",
+					"label": "scheduler_heartbeat_sec",
+					"description": "The scheduler constantly tries to trigger new tasks.This defines how often the scheduler should run (in seconds)",
+					"type": "integer",
+					"default": 5,
+					"min": 1,
+					"max": 100,
+					"required": "no"
+				},{
+					"key": "scheduler_zombie_task_threshold",
+					"label": "scheduler_zombie_task_threshold",
+					"description": "Local task jobs periodically heartbeat to the DB.",
+					"type": "integer",
+					"default": 300,
+					"min": 1,
+					"max": 6000,
+					"required": "no"
+				}
+				
+			]
+		}
+	]
+}
